@@ -6,7 +6,7 @@ const router = require('./router.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const app = express();
 
-app.use('/assets', express.static(path.resolve(`${__dirname}/stickers/`)));
+app.use('/assets', express.static(path.resolve(`${__dirname}/../stickers/`)));
 
 router(app);
 
