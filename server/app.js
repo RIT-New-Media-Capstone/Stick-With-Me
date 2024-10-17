@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const http = require('http');
-const WebSocket = require('ws');
+const socketIO = require('socket.io');
 
 const router = require('./router.js');
 
@@ -14,20 +14,20 @@ router(app);
 
 const server = http.createServer(app);
 
-const wss = new WebSocket.Server({ server });
+const io = socketIO(server);
 
-wss.on('connection', (ws) => {
+io.on('connection', (socket) => {
   console.log('New WebSocket connection');
 
   // WebSocket message event
-  ws.on('message', (message) => {
+  socket.on('message', (message) => {
     console.log(`Received message: ${message}`);
     // Echo the message back to the client
-    ws.send(`Server received: ${message}`);
+    socket.send(`Server received: ${message}`);
   });
 
   // WebSocket close event
-  ws.on('close', () => {
+  socket.on('close', () => {
     console.log('WebSocket connection closed');
   });
 });
