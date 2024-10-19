@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stick With Me - Streamer View</title>
+    <title>Stream</title>
 </head>
 <body>
-    Streamer View
+    <h1>Streaming Webcam</h1>
+    <video autoplay muted></video> <!-- Mute the video to allow autoplay without interaction -->
+    <br>
+    <button id="startButton">Start Stream</button>
+    <button id="stopButton" disabled>Stop Stream</button> <!-- Initially disabled -->
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/stream.js"></script>
 </body>
 </html>

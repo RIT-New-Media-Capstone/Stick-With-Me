@@ -6,11 +6,17 @@
     <title>Stick With Me - Viewer</title>
 </head>
 <body>
-    Viewer view
+    <h1>Watching Stream</h1>
+    <video autoplay muted></video>
+    <button id="startButton">Start Stream</button>
+
     <div id="sticker-selection-container">
-        <img src="/assets/Star Sticker.gif" alt="star sticker">
-        <img src="/assets/Heart Sticker.gif" alt="heart sticker">
-        <img src="/assets/Sad Cloud Sticker.gif" alt="sad cloud sticker">
+        <img src="/stickers/Star Sticker.gif" alt="star sticker">
+        <img src="/stickers/Heart Sticker.gif" alt="heart sticker">
+        <img src="/stickers/Sad Cloud Sticker.gif" alt="sad cloud sticker">
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/watch.js"></script>
 </body>
 </html>
