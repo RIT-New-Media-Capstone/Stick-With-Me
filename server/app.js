@@ -8,8 +8,8 @@ const router = require('./router.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const app = express();
 
-// Static files for scripts (inside the server folder)
-app.use('/scripts', express.static(path.resolve(`${__dirname}/scripts/`)));
+app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
+
 
 // Set up routes (views folder is outside the server folder)
 router(app);
@@ -18,15 +18,24 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on('connection', (socket) => {
-  console.log('New WebSocket connection');
+  console.log('New Socket.IO connection');
 
-  // Relaying signaling data for WebRTC between stream and watch clients
-  socket.on('signal', (data) => {
-    socket.broadcast.emit('signal', data);
+  // Handle incoming video frames
+  socket.on('videoFrame', (data) => {
+    // Broadcast the video frame to all connected clients
+    socket.broadcast.emit('videoFrame', data);
   });
 
+  socket.on('canvasFrame', (data) => {
+    console.log('Received canvas frame from viewer');
+    // Broadcast the canvas frame to all connected clients
+    socket.broadcast.emit('canvasFrame', data);
+  });
+
+
   socket.on('disconnect', () => {
-    console.log('WebSocket connection closed');
+    console.log('Socket.IO connection closed');
+
   });
 });
 

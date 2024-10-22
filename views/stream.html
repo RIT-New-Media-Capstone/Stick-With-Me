@@ -3,16 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream</title>
+    <title>Stick With Me - Streamer View</title>
+    <style>
+        #videoContainer {
+            position: relative;
+            width: 640px;
+            height: 480px;
+        }
+        #videoElement {
+            width: 100%;
+            height: 100%;
+        }
+        #receivedCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none; /* Ensure the canvas doesn't interfere with interactions */
+        }
+        #receivedCanvas {
+            z-index: 1;
+        }
+        #stickerCanvas {
+            z-index: 2;
+        }
+        #sticker-selection-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Ensure the sticker selection container is behind the canvas elements */
+            visibility: hidden; /* Hide the sticker selection container */
+        }
+        .sticker {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            cursor: move;
+        }
+    </style>
 </head>
 <body>
-    <h1>Streaming Webcam</h1>
-    <video autoplay muted></video> <!-- Mute the video to allow autoplay without interaction -->
-    <br>
-    <button id="startButton">Start Stream</button>
-    <button id="stopButton" disabled>Stop Stream</button> <!-- Initially disabled -->
-    
+    <h1>Streamer View</h1>
+    <div id="videoContainer">
+        <video id="videoElement" autoplay></video>
+        <canvas id="receivedCanvas" width="640" height="480"></canvas>
+
+    </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/scripts/stream.js"></script>
+    <script src="/assets/stream.js"></script>
+
 </body>
 </html>
