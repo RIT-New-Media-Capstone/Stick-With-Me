@@ -10,10 +10,11 @@ const app = express();
 
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 
+
+// Set up routes (views folder is outside the server folder)
 router(app);
 
 const server = http.createServer(app);
-
 const io = socketIO(server);
 
 io.on('connection', (socket) => {
@@ -34,6 +35,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('Socket.IO connection closed');
+
   });
 });
 
