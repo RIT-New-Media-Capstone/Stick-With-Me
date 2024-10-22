@@ -8,7 +8,7 @@ const router = require('./router.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const app = express();
 
-app.use('/assets', express.static(path.resolve(`${__dirname}/../stickers/`)));
+app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 
 router(app);
 
@@ -17,18 +17,23 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 io.on('connection', (socket) => {
-  console.log('New WebSocket connection');
+  console.log('New Socket.IO connection');
 
-  // WebSocket message event
-  socket.on('message', (message) => {
-    console.log(`Received message: ${message}`);
-    // Echo the message back to the client
-    socket.send(`Server received: ${message}`);
+  // Handle incoming video frames
+  socket.on('videoFrame', (data) => {
+    // Broadcast the video frame to all connected clients
+    socket.broadcast.emit('videoFrame', data);
   });
 
-  // WebSocket close event
-  socket.on('close', () => {
-    console.log('WebSocket connection closed');
+  socket.on('canvasFrame', (data) => {
+    console.log('Received canvas frame from viewer');
+    // Broadcast the canvas frame to all connected clients
+    socket.broadcast.emit('canvasFrame', data);
+  });
+
+
+  socket.on('disconnect', () => {
+    console.log('Socket.IO connection closed');
   });
 });
 
