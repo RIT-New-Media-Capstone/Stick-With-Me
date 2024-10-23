@@ -4,49 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stick With Me - Streamer View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
     <style>
-        #videoContainer {
-            position: relative;
-            width: 640px;
-            height: 480px;
-        }
-        #videoElement {
-            width: 100%;
-            height: 100%;
-        }
-        #receivedCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none; /* Ensure the canvas doesn't interfere with interactions */
-        }
-        #receivedCanvas {
-            z-index: 1;
-        }
-        #stickerCanvas {
-            z-index: 2;
-        }
-        #sticker-selection-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1; /* Ensure the sticker selection container is behind the canvas elements */
-            visibility: hidden; /* Hide the sticker selection container */
-        }
-        .sticker {
-            width: 100px;
-            height: 100px;
-            position: absolute;
-            cursor: move;
-        }
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    #videoContainer {
+        position: relative;
+        width: 640px;
+        height: 480px;
+    }
+
+    #videoElement {
+        width: 100%;
+        height: 100%;
+    }
+
+    #receivedCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none; /* Ensure the canvas doesn't interfere with interactions */
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    #stickerCanvas {
+        z-index: 2;
+    }
+
+    #sticker-selection-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1; /* Ensure the sticker selection container is behind the canvas elements */
+        visibility: hidden; /* Hide the sticker selection container */
+    }
+
+    .sticker {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        cursor: move;
+    }
     </style>
 </head>
 <body>
-    <h1>Streamer View</h1>
+    <h1 class="is-size-2 has-text-centered has-text-weight-semibold">Streamer View</h1>
     <div id="videoContainer">
         <video id="videoElement" autoplay></video>
         <canvas id="receivedCanvas" width="640" height="480"></canvas>
-
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/assets/stream.js"></script>
