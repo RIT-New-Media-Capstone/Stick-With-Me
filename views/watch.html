@@ -42,7 +42,7 @@
             margin: 0 10px;
         }
 
-        canvas {
+        #canvas {
             margin-top: 10px;
             border: 2px solid #ccc;
             border-radius: 10px;
@@ -58,12 +58,16 @@
         <canvas id="canvas" width="640" height="480"></canvas>
     </div>
     <div id="sticker-selection-container">
-        <img src="/assets/stickers/Heart_Sticker.gif" class="sticker" id="sticker1" draggable="true">
-        <img src="/assets/stickers/Sad_Cloud_Sticker.gif" class="sticker" id="sticker2" draggable="true">
-        <img src="/assets/stickers/Star_Sticker.gif" class="sticker" id="sticker3" draggable="true">
+        <canvas width="100" height ="100" class="sticker" id="star-sticker" draggable="true"></canvas>
+        <canvas width="100" height ="100" class="sticker" id="heart-sticker" draggable="true"></canvas>
+        <canvas width="100" height ="100" class="sticker" id="cloud-sticker" draggable="true"></canvas>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/assets/watch.js"></script>
+
+    <script src="https://unpkg.com/@rive-app/canvas@2.7.0"></script>
+    <script src="/assets/stickers.js"></script>
+
 
 </body>
 </html>
