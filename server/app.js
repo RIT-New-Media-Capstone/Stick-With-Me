@@ -32,6 +32,11 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('canvasFrame', data);
   });
 
+  socket.on('stickerUpdate', (stickers) => {
+    console.log('Received sticker update');
+    // Broadcast the sticker update to all connected clients
+    io.emit('stickerUpdate', stickers);
+});
 
   socket.on('disconnect', () => {
     console.log('Socket.IO connection closed');

@@ -1,6 +1,8 @@
 const videoElement = document.getElementById('videoElement');
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+const stickerCanvas = document.getElementById('sticker-canvas');
+const stickerCtx = stickerCanvas.getContext('2d');
 const socket = io();
 
 let stickers = [];
@@ -14,9 +16,6 @@ socket.on('videoFrame', (data) => {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        // Redraw stickers
-        await drawStickers();
-
         // Send the canvas data back to the server
         sendCanvasData();
     };
@@ -25,6 +24,7 @@ socket.on('videoFrame', (data) => {
 // Listen for sticker updates from the server
 socket.on('stickerUpdate', async (data) => {
     stickers = data;
+
     // Redraw stickers
     await drawStickers();
 });
@@ -43,49 +43,18 @@ function dragStart(e) {
     }, 0);
 }
 
+// Resets selection elements 
 function dragEnd(e) {
     e.target.style.display = 'block';
     const x = e.pageX - canvas.offsetLeft - e.target.width / 2;
     const y = e.pageY - canvas.offsetTop - e.target.height / 2;
     e.target.style.left = `${x}px`;
     e.target.style.top = `${y}px`;
-
-    // Update sticker position in the array
-    const sticker = stickers.find(sticker => sticker.id === e.target.id);
-    if (sticker) {
-        sticker.x = x;
-        sticker.y = y;
-    } else {
-        stickers.push({
-            id: e.target.id,
-            src: e.target.src,
-            x: x,
-            y: y,
-            width: e.target.width,
-            height: e.target.height
-        });
-    }
-
-    // Place the sticker on the canvas
-    placeSticker({
-        id: e.target.id,
-        src: e.target.src,
-        x: x,
-        y: y,
-        width: e.target.width,
-        height: e.target.height
-    }).then(() => {
-        // Send the updated stickers to the server
-        socket.emit('stickerUpdate', stickers);
-
-        // Send the canvas data back to the server
-        sendCanvasData();
-    });
 }
 
 // Allow dropping on the canvas
-canvas.addEventListener('dragover', dragOver);
-canvas.addEventListener('drop', drop);
+stickerCanvas.addEventListener('dragover', dragOver);
+stickerCanvas.addEventListener('drop', drop);
 
 function dragOver(e) {
     e.preventDefault();
@@ -100,30 +69,25 @@ function drop(e) {
     stickerElement.style.left = `${x}px`;
     stickerElement.style.top = `${y}px`;
 
-    // Update sticker position in the array
-    const sticker = stickers.find(sticker => sticker.id === id);
-    if (sticker) {
-        sticker.x = x;
-        sticker.y = y;
-    } else {
-        stickers.push({
-            id: id,
-            src: stickerElement.src,
-            x: x,
-            y: y,
-            width: stickerElement.width,
-            height: stickerElement.height
-        });
-    }
+    let artboard = "none";
+    if (id === "star-sticker") artboard = "Star Sticker"
+    else if (id === "heart-sticker") artboard = "Heart Sticker"
+    else if (id === "cloud-sticker") artboard = "Sad Cloud Sticker"
+
+    // Add sticker to array
+    stickers.push({
+        id: id,
+        artboard: artboard,
+        x: x,
+        y: y,
+    });
 
     // Place the sticker on the canvas
     placeSticker({
         id: id,
-        src: stickerElement.src,
+        artboard: artboard,
         x: x,
         y: y,
-        width: stickerElement.width,
-        height: stickerElement.height
     }).then(() => {
         // Send the updated stickers to the server
         socket.emit('stickerUpdate', stickers);
@@ -133,22 +97,36 @@ function drop(e) {
     });
 }
 
-function placeSticker(sticker) {
+function placeSticker(stickerData) {
     return new Promise((resolve) => {
-        const img = new Image();
-        img.src = sticker.src;
-        img.onload = () => {
-            context.drawImage(img, sticker.x, sticker.y, sticker.width, sticker.height);
-            resolve();
-        };
-    });
+        const sticker = new rive.Rive({
+            src: "/assets/stickers/Stickers.riv",
+            canvas: stickerCanvas,
+            autoplay: false,
+            artboard: stickerData.artboard,
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                minX: stickerData.x,
+                minY: stickerData.y,
+                maxX: stickerData.x + 100,
+                maxY: stickerData.y + 100
+            }),
+            onLoad: () => {
+                sticker.play();
+                resolve();
+            },
+        });
+    })
 }
 
-function drawStickers() {
-    return Promise.all(stickers.map(sticker => placeSticker(sticker)));
+async function drawStickers() {
+    stickerCtx.clearRect(0, 0, stickerCanvas.width, stickerCanvas.height);
+    for(const sticker of stickers) {
+        await placeSticker(sticker)
+    }
 }
 
 function sendCanvasData() {
-    const canvasData = canvas.toDataURL('image/webp');
+    const canvasData = stickerCanvas.toDataURL('image/webp');
     socket.emit('canvasFrame', canvasData);
 }

@@ -7,10 +7,9 @@ const videoElement = document.createElement('video');
 videoElement.width = 640;
 videoElement.height = 480;
 videoElement.autoplay = true;
-videoElement.style.display = 'none'; // Hid
+videoElement.style.transform = "translate(10px, -475px)";
 
 document.getElementById('videoContainer').appendChild(videoElement);
-
 
 // Request access to the webcam
 navigator.mediaDevices.getUserMedia({ video: true })
