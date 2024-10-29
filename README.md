@@ -13,7 +13,7 @@ Authors:
     3. Run the command `npm start` to initialize the server.
   
 2. Using Stick With Me
-    1. Open your browser of choice, and enter the following URL: http://localhost:3000/ . Additionally, if you wanted to immediately navigate to the streaming page add "stream" to your URL. If you would wanted to immediately navigate to the watching page add "watch" to your URL.
+    1. Open your browser of choice, and enter the following URL: https://stick-with-me-444c4a37b151.herokuapp.com/. Additionally, if you wanted to immediately navigate to the streaming page add "stream" to your URL. If you would wanted to immediately navigate to the watching page add "watch" to your URL.
     2. You will be taken to an index page with 2 button options to stream video or watch a stream.
         1. If you would like to stream, select "Stream" and allow your browser use of your webcam.
         2. If you would like to watch the streamer on the /stream route, select "Watch". However, there must be someone on the /stream route and streaming for the watcher to view streamed webcam footage. 
